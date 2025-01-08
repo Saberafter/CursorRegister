@@ -23,7 +23,7 @@ class OneAPIManager:
         self.access_token = access_token
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": self.access_token
+            "Authorization": f"Bearer {self.access_token}"
         }
 
     def get_channel(self, id):
@@ -39,41 +39,21 @@ class OneAPIManager:
         return response
 
     def add_channel(self, name, base_url, keys, models, rate_limit_count = 0):
-        url = self.base_url + "/api/channel"
+        url = self.base_url + "/api/channels"
 
-        data = {"name": name,
-                "type": 1,
-                "key": "\n".join(keys),
-                "openai_organization": "",
-                "base_url": base_url,
-                "other": "",
-                "model_mapping":"",
-                "status_code_mapping":"",
-                "headers":"",
-                "models": ','.join(models),
-                "auto_ban":0,
-                "is_image_url_enabled": 0,
-                "model_test": models[0],
-                "tested_time": 0,
-                "priority": 0,
-                "weight": 0,
-                "groups": ["default"],
-                "proxy_url": "",
-                "region": "",
-                "sk": "",
-                "ak": "",
-                "project_id": "",
-                "client_id": "",
-                "client_secret": "",
-                "refresh_token": "",
-                "gcp_account": "",
-                "rate_limit_count":rate_limit_count,
-                "gemini_model":"",
-                "tags":"Cursor",
-                "rate_limited":rate_limit_count>0,
-                "is_tools": False,
-                "claude_original_request": False,
-                "group":"default"
+        data = {
+            "name": name,
+            "type": "openai",
+            "baseURL": base_url,
+            "models": models,
+            "keys": keys,
+            "priority": 0,
+            "weight": 1,
+            "rateLimit": rate_limit_count,
+            "rateLimitDuration": 60,
+            "groups": ["default"],
+            "labels": ["Cursor"],
+            "status": "active"
         }
 
         response = requests.post(url, json=data, headers=self.headers)
