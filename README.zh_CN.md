@@ -15,7 +15,7 @@
 
 - 注册Cursor账号并保存账号、密码、令牌(token)到本地
 - 注册Cursor账号并上传令牌(token)到One-API
-- 清理One-API中额度不足的Cursor账号
+- 管理One-API中额度不足的Cursor账号（支持删除/禁用）
 - 上述功能均支持在Github Action中运行
 
 ## 本地运行
@@ -44,13 +44,15 @@ python cursor_register.py --oneapi_url {oneapi_url} --oneapi_token {oneapi_token
 - `oneapi_token`: One-API 访问令牌(token)，详见 [OneAPI API](https://github.com/songquanpeng/one-api/blob/main/docs/API.md)
 - `oneapi_channel_url`: Cursor-API 反代服务地址，需自行搭建Cursor-API反代服务 [cursor-api](https://github.com/lvguanjun/cursor-api)
 
-### 清除[One-API](https://github.com/songquanpeng/one-api)的低额度渠道 
+### 管理[One-API](https://github.com/songquanpeng/one-api)的低额度渠道 
 
 ```
-python tokenManager/oneapi_cursor_cleaner.py --oneapi_url {oneapi_url} --oneapi_token {oneapi_token}
+python tokenManager/oneapi_cursor_cleaner.py --oneapi_url {oneapi_url} --oneapi_token {oneapi_token} --disable_low_balance_accounts {disable_low_balance_accounts} --delete_low_balance_accounts {delete_low_balance_accounts}
 ```
 - `oneapi_url`: One-API 地址
 - `oneapi_token`: One-API 访问令牌(token)，详见 [OneAPI API](https://github.com/songquanpeng/one-api/blob/main/docs/API.md)
+- `disable_low_balance_accounts`: `True` 或 `False`，禁用One-API中的低额度账号
+- `delete_low_balance_accounts`: `True` 或 `False`，删除One-API中的低额度账号
 
 ## 在Github Action中运行
 
@@ -82,12 +84,16 @@ GitHub Action适用于不便在本地搭建环境或本地环境不佳的用户�
 - `Ingest account tokens to OneAPI`: 选中此项，以开启One-API服务
 - `Upload account infos to artifact`: 如果选中，那么数据也将被上传到工作流程构件(GitHub Artifacts)，如果不选则跳过该步骤。
  
-### 清理[One-API](https://github.com/songquanpeng/one-api)中额度不足的Cursor账号 
+### 管理[One-API](https://github.com/songquanpeng/one-api)中额度不足的Cursor账号 
 
-请运行 **`OneAPI Cursor Cleaner`**。需要保证已添加了下列机密(secrets)。
+请运行 **`OneAPI Cursor Cleaner`**。需要先保证已添加了下列机密(secrets)。
 
 - `CURSOR_ONEAPI_URL`: 对应参数 `oneapi_url`
 - `CURSOR_ONEAPI_TOKEN`: 对应参数 `oneapi_token`
+
+参数：
+- `Disable Low Balance Accounts`: 是否禁用额度较低的渠道
+- `Delete Low Balance Accounts`: 是否删除额度较低的渠道
 
 ## 计划
 - 修复多线程模式下可能存在的某些bugs。（众所周知多线程很容易出问题）

@@ -14,7 +14,7 @@ Automatically register a Cursor account and save the account name, password, and
 
 - Register Cursor accounts and save account, password and token to .csv locally.
 - Register Cursor accounts upload tokens to One API.
-- Clean up Cursor channels with low balance in One API.
+- Manage Cursor channels with low balance in One API.
 - The above features all support to run in Github Action environment.
 
 ## Run in local
@@ -43,13 +43,15 @@ python cursor_register.py --oneapi_url {oneapi_url} --oneapi_token {oneapi_token
 - `oneapi_token`: The access token for your oneapi website. See more details in [OneAPI API](https://github.com/songquanpeng/one-api/blob/main/docs/API.md)
 - `oneapi_channel_url`: The cursor-api reverse proxy server like [cursor-api](https://github.com/lvguanjun/cursor-api)
 
-### Clean up low balance Cursor channels in [One-API](https://github.com/songquanpeng/one-api)
+### Manage low balance Cursor channels in [One-API](https://github.com/songquanpeng/one-api)
 
 ```
-python tokenManager/oneapi_cursor_cleaner.py --oneapi_url {oneapi_url} --oneapi_token {oneapi_token}
+python tokenManager/oneapi_cursor_cleaner.py --oneapi_url {oneapi_url} --oneapi_token {oneapi_token} --disable_low_balance_accounts {disable_low_balance_accounts} --delete_low_balance_accounts {delete_low_balance_accounts}
 ```
 - `oneapi_url`: The web address for your oneapi server. 
 - `oneapi_token`: The access token for your oneapi website. See more details in [OneAPI API](https://github.com/songquanpeng/one-api/blob/main/docs/API.md)
+- `disable_low_balance_accounts`: `True` or `False` to disable the low balance accounts in One-API
+- `delete_low_balance_accounts`: `True` or `False` to delete the low balance accounts in One-API
 
 ## Run in Github Action
 
@@ -77,12 +79,17 @@ Please run the Github Action pipeline **`Cursor Register`** with the following p
 - `Ingest account tokens to OneAPI`: Mark as `☑` to enable One-API service.
 - `Upload account infos to artifact`: `☑` for uploeading the artifact and `☑` will skip this step
 
-### Clean up low balance Cursor channels in [One-API](https://github.com/songquanpeng/one-api)
+### Manage low balance Cursor channels in [One-API](https://github.com/songquanpeng/one-api)
 
-Please run the Github Action pipeline **`OneAPI Cursor Cleaner`**. Before runnign the pipeline, you need to add the following secrets in your repo.
+Before runnign the pipeline, you need to add the following secrets in your repo.
 
 - `CURSOR_ONEAPI_URL`: For parameter `oneapi_url`
 - `CURSOR_ONEAPI_TOKEN`: For parameter `oneapi_token`
+
+Please run the Github Action pipeline **`OneAPI Cursor Cleaner`**.
+
+- `Disable Low Balance Accounts`: Disable low balance accounts or not
+- `Delete Low Balance Accounts`: Delete low balance accounts or not
 
 ## Todo
 - Maybe some bugs when running in multiple threading mode (`max_workers` > 1), but not sure. :(
