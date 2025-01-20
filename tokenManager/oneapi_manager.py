@@ -2,22 +2,6 @@ import requests
 
 class OneAPIManager:
     
-    cursor_models = ["claude-3-5-sonnet-20241022", 
-                              "claude-3-opus", 
-                              "claude-3-5-haiku", 
-                              "claude-3-5-sonnet", 
-                              "cursor-small", 
-                              "gemini-exp-1206",
-                              "gemini-2.0-flash-exp",
-                              "gemini-2.0-flash-thinking-exp",
-                              "gpt-3.5-turbo",
-                              "gpt-4",
-                              "gpt-4-turbo-2024-04-09",
-                              "gpt-4o",
-                              "gpt-4o-mini",
-                              "o1-mini",
-                              "o1-preview"]
-
     def __init__(self, url, access_token):
         self.base_url = url
         self.access_token = access_token
@@ -38,12 +22,13 @@ class OneAPIManager:
         response = requests.get(url, headers=self.headers)
         return response
 
-    def add_channel(self, name, base_url, keys, models, rate_limit_count = 0):
+    # Support multiple keys separated by '\n'
+    def add_channel(self, name, base_url, key, models, rate_limit_count = 0):
         url = self.base_url + "/api/channel"
 
         data = {"name": name,
                 "type": 1,
-                "key": "\n".join(keys),
+                "key": key,
                 "openai_organization": "",
                 "base_url": base_url,
                 "other": "",
